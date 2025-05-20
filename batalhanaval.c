@@ -20,6 +20,10 @@ int cabeNoTabuleiro(int linha, int coluna, char direcao) {
         return coluna + 3 <= 10;
     } else if (direcao == 'V') {
         return linha + 3 <= 10;
+    } else if (direcao =='D'){
+        return linha + 3 <= 10 && coluna + 3 <= 10;
+    } else if (direcao == 'I'){
+        return linha + 3 <= 10 && coluna - 2 >= 0;
     }
     return 0;
 }
@@ -31,6 +35,10 @@ int estaLivre(int campo[10][10], int linha, int coluna, char direcao) {
             if (campo[linha][coluna + i] == 3) return 0;
         } else if (direcao == 'V') {
             if (campo[linha + i][coluna] == 3) return 0;
+        } else if (direcao == 'D') {
+            if (campo[linha + i][coluna + i] == 3) return 0;
+        } else if (direcao == 'I') {
+            if (campo[linha + i][coluna - i] == 3) return 0;
         }
     }
     return 1;
@@ -43,6 +51,10 @@ void colocarNavio(int campo[10][10], int navio[3], int linha, int coluna, char d
             campo[linha][coluna + i] = navio[i];
         } else if (direcao == 'V') {
             campo[linha + i][coluna] = navio[i];
+        } else if (direcao == 'D') {
+            campo[linha + i][coluna + i] = navio[i];
+        } else if (direcao == 'I') {
+            campo[linha + i][coluna - i] = navio[i];
         }
     }
 }
@@ -65,9 +77,13 @@ int main() {
 
     int navioA[3] = {3, 3, 3}; // horizontal
     int navioB[3] = {3, 3, 3}; // vertical
+    int navioC[3] = {3, 3, 3}; // diagonal principal
+    int navioD[3] = {3, 3, 3}; // diagonal inversa
 
     int l1 = 2, c1 = 4;
     int l2 = 0, c2 = 0;
+    int l3 = 4, c3 = 4;
+    int l4 = 0, c4 = 9;
 
     if (cabeNoTabuleiro(l1, c1, 'H') && estaLivre(campo, l1, c1, 'H')) {
         colocarNavio(campo, navioA, l1, c1, 'H');
@@ -80,6 +96,20 @@ int main() {
         colocarNavio(campo, navioB, l2, c2, 'V');
     } else {
         printf("Erro ao colocar navio B\n");
+        return 1;
+    }
+
+    if (cabeNoTabuleiro(l3, c3, 'D') && estaLivre(campo, l3, c3, 'D')) {
+        colocarNavio(campo, navioC, l3, c3, 'D');
+    } else {
+        printf("Erro ao colocar navio C\n");
+        return 1;
+    }
+
+    if (cabeNoTabuleiro(l4, c4, 'I') && estaLivre(campo, l4, c4, 'I')) {
+        colocarNavio(campo, navioD, l4, c4, 'I');
+    } else {
+        printf("Erro ao colocar navio D\n");
         return 1;
     }
 
